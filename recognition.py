@@ -5,7 +5,7 @@ import os
 import pickle
 
 
-class FacialRecognition:
+class FacialRecognition():
 
     def collect_dataset(self):
 
@@ -15,26 +15,27 @@ class FacialRecognition:
             person_id = int(os.listdir(path)[-1]) + 1
         else:
             person_id = 1
-        capture = cv.VideoCapture(0)
-        capture.set(3, 640)  # set video width
-        capture.set(4, 480)  # set video height
+        cam = cv.VideoCapture(0)
+        cam.set(3, 640)  # set video width
+        cam.set(4, 480)  # set video height
         count = 1
 
-        while capture.isOpened():
-            is_working, frame = capture.read()
-            # grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
-            file_dir = os.path.join(path, str(person_id))
-            filename = f"{file_dir}/{name}.{str(count)}.jpg"
-            print(filename)
-            cv.imwrite(filename, frame)
+        while cam.isOpened():
+            directory = f'dataset/{name}'
+            filename = f"{directory}/{name}.{str(count)}.jpg"
+            if name not in os.listdir('dataset'):
+                os.mkdir(directory)
+            is_working, frame = cam.read()
+            grey = cv.cvtColor(frame, cv.COLOR_BGR2GRAY)
+            cv.imwrite(filename, grey)
             count += 1
             cv.imshow(f"Collecting {name}'s face", frame)
 
             if cv.waitKey(10) & 0xFF == ord('q'):
                 break
-            # if count >= 21:
-            #     break
-        capture.release()
+            if count >= 21:
+                break
+        cam.release()
         cv.destroyAllWindows()
 
 

@@ -5,14 +5,14 @@ class FaceDetection:
 
     def detect_face(self):
 
-        capture = cv.VideoCapture(0)
-        capture.set(3, 640)  # set video width
-        capture.set(4, 480)  # set video height
+        cam = cv.VideoCapture(0)
+        cam.set(3, 640)  # set video width
+        cam.set(4, 480)  # set video height
         net = cv.dnn.readNetFromCaffe(prototxt="deploy.prototxt",
                                       caffeModel="res10_300x300_ssd_iter_140000.caffemodel")
 
-        while capture.isOpened():
-            is_open, frame = capture.read()
+        while cam.isOpened():
+            is_open, frame = cam.read()
             image_height, image_width, _ = frame.shape
             preprocessed_image = cv.dnn.blobFromImage(frame, scalefactor=1.0, size=(300, 300),
                                                       mean=(104.0, 117.0, 123.0), swapRB=False, crop=False)
@@ -42,7 +42,7 @@ class FaceDetection:
             if cv.waitKey(10) & 0xFF == ord('q'):
                 break
 
-        capture.release()
+        cam.release()
         cv.destroyAllWindows()
 
 
