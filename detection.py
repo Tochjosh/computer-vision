@@ -12,7 +12,10 @@ class FaceDetection:
                                       caffeModel="res10_300x300_ssd_iter_140000.caffemodel")
 
         while cam.isOpened():
-            is_open, frame = cam.read()
+            is_okay, frame = cam.read()
+            if not is_okay:
+                continue
+                
             image_height, image_width, _ = frame.shape
             preprocessed_image = cv.dnn.blobFromImage(frame, scalefactor=1.0, size=(300, 300),
                                                       mean=(104.0, 117.0, 123.0), swapRB=False, crop=False)
